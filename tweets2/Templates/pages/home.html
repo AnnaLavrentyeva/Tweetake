@@ -31,7 +31,33 @@
 
 <script>
 
-const tweetCreateElement = document.getElementById(
+function handleFormDidSubmit(event){
+  event.preventDefault()
+  const myForm = event.target
+  const myFormData = new FormData(myForm)
+  const url = myForm.getAttribute("action")
+  const method = myForm.getAttribute("method")
+  const xhr = new XMLHttpRequest()
+  xhr.open(method, url)
+  xhr.setRequestHeader("HTTP_X_REQUESTED_WITH", "XMLHttpRequest")
+  xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest")
+
+
+
+  xhr.onload = function(){
+    const serverResponse = xhr.response
+    console.log(xhr.status, serverResponse)
+    const tweetsEl = document.getElementById("tweets")
+    loadTweets(tweetsEl)
+    }
+    xhr.send(myFormData)
+
+}
+
+const tweetCreateElement = document.getElementById("tweet-create-form")
+
+tweetCreateElement.addEventListener("submit", handleFormDidSubmit)
+
 const tweetsEl = document.getElementById("tweets")
 
 <!--tweetsElement.innerHTML = 'Loading...'-->
@@ -54,13 +80,13 @@ const tweetsEl = document.getElementById("tweets")
     var finalTweetStr = ""
     var i
     for(i=0; i<listedItems.length; i++){
-     console.log(i)
+//     console.log(i)
      var tweetObj = listedItems[i]
      var currentItem = formatTweetElem(tweetObj)
      finalTweetStr += currentItem
     }
     tweetsElement.innerHTML = finalTweetStr
-    console.log(listedItems)
+//    console.log(listedItems)
    }
    xhr.send()
  }
